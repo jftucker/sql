@@ -2,8 +2,8 @@ DROP DATABASE IF EXISTS sql_invoicing;
 CREATE DATABASE sql_invoicing; 
 \c sql_invoicing;
 
-/* SET NAMES utf8 ; */
-character_set_client := utf8mb4 ;
+-- /* SET NAMES utf8 ; */
+-- character_set_client := utf8mb4 ;
 
 CREATE SEQUENCE payment_methods_seq;
 
@@ -28,7 +28,7 @@ CREATE TABLE clients (
   phone varchar(50) DEFAULT NULL,
   PRIMARY KEY (client_id)
 )  ;
-INSERT INTO clients VALUES (1,'Vinte','3 Nevada Parkway','Syrac\c','NY','315-252-7305');
+INSERT INTO clients VALUES (1,'Vinte','3 Nevada Parkway','Syracuse','NY','315-252-7305');
 INSERT INTO clients VALUES (2,'Myworks','34267 Glendale Parkway','Huntington','WV','304-659-1170');
 INSERT INTO clients VALUES (3,'Yadel','096 Pawling Parkway','San Francisco','CA','415-144-6037');
 INSERT INTO clients VALUES (4,'Kwideo','81674 Westerfield Circle','Waco','TX','254-750-0784');
@@ -169,14 +169,14 @@ INSERT INTO customers VALUES (9,'Romola','Rumgay','1992-05-23','559-181-3744','3
 INSERT INTO customers VALUES (10,'Levy','Mynett','1969-10-13','404-246-3370','68 Lawn Avenue','Atlanta','GA',796);
 
 
-CREATE TABLE order_stat\cs (
+CREATE TABLE order_statuses (
   order_status_id smallint NOT NULL,
   name varchar(50) NOT NULL,
   PRIMARY KEY (order_status_id)
 )  ;
-INSERT INTO order_stat\cs VALUES (1,'Processed');
-INSERT INTO order_stat\cs VALUES (2,'Shipped');
-INSERT INTO order_stat\cs VALUES (3,'Delivered');
+INSERT INTO order_statuses VALUES (1,'Processed');
+INSERT INTO order_statuses VALUES (2,'Shipped');
+INSERT INTO order_statuses VALUES (3,'Delivered');
 
 
 CREATE SEQUENCE orders_seq;
@@ -192,7 +192,7 @@ CREATE TABLE orders (
   PRIMARY KEY (order_id)
  ,
   CONSTRAINT fk_orders_customers FOREIGN KEY (customer_id) REFERENCES customers (customer_id) ON UPDATE CASCADE,
-  CONSTRAINT fk_orders_order_stat\cs FOREIGN KEY (status) REFERENCES order_stat\cs (order_status_id) ON UPDATE CASCADE,
+  CONSTRAINT fk_orders_order_statuses FOREIGN KEY (status) REFERENCES order_statuses (order_status_id) ON UPDATE CASCADE,
   CONSTRAINT fk_orders_shippers FOREIGN KEY (shipper_id) REFERENCES shippers (shipper_id) ON UPDATE CASCADE
 )   ;
 
@@ -200,7 +200,7 @@ ALTER SEQUENCE orders_seq RESTART WITH 11;
 
 CREATE INDEX fk_orders_customers_idx ON orders (customer_id);
 CREATE INDEX fk_orders_shippers_idx ON orders (shipper_id);
-CREATE INDEX fk_orders_order_stat\cs_idx ON orders (status);
+CREATE INDEX fk_orders_order_statuses_idx ON orders (status);
 INSERT INTO orders VALUES (1,6,'2019-01-30',1,NULL,NULL,NULL);
 INSERT INTO orders VALUES (2,7,'2018-08-02',2,NULL,'2018-08-03',4);
 INSERT INTO orders VALUES (3,8,'2017-12-01',1,NULL,NULL,NULL);
@@ -248,7 +248,7 @@ INSERT INTO order_items VALUES (9,6,5,7.28);
 INSERT INTO order_items VALUES (10,1,10,6.01);
 INSERT INTO order_items VALUES (10,9,9,4.28);
 
-CREATE TABLE sql_store.order_item_notes (
+CREATE TABLE order_item_notes (
   note_id INT NOT NULL,
   order_Id INT NOT NULL,
   product_id INT NOT NULL,
